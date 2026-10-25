@@ -112,6 +112,8 @@ ID 1 is an equally good parallel edge to 2. Both `1->3` and `1->2->3` cost -1; t
 
 ## Benchmark
 
+Measured on 25 October 2026: Windows 11, Intel Core i7-13650HX, about 16 GB RAM, Oracle JDK 25.0.1 (`-Xmx1g`, compiled with `--release 17`) and Python 3.12.14.
+
 `Check.graph(n,m)` uses `java.util.Random(73L+n)`. The first `n-1` edges form a chain with negative weights from -1000000000 to -1. Remaining random edges have weights from 0 to 1000000000. Both methods get the identical edge array. The negative chain is the unique optimum: replacing any chain edge with a nonnegative edge raises the cost. Before timing and after each measured call, the checker verifies the cost, one component and every chain edge exactly once.
 
 Each method has one validated warm-up call per size and exactly three measured calls. Their order alternates. `System.nanoTime()` measures the whole algorithm call, including its internal adjacency/DSU/heap construction, sorting, allocation and result creation. Input generation, parsing, validation, printing, JVM startup and compilation are excluded for both methods. No explicit garbage collection is requested.
@@ -128,3 +130,7 @@ Times below are milliseconds from `tests/results.txt`; the median is the middle 
 | 100000 | 250000 | 100073 | Prim | 318.580 | 322.200 | 354.353 | 322.200 |
 
 Kruskal had a lower median at the first and largest sizes; Prim at the middle size. This is one sparse graph family with a known optimum, not evidence of a universal winner. One warm-up and three samples leave considerable JIT, garbage-collection and system noise. 
+
+## Sources
+
+Sources: the [assignment template](https://github.com/RZhaniya/daa-assignment-3-graphs), supplied English/Russian PDFs, Lecture 7 and syllabus. ChatGPT/Codex assisted with the algorithms, tests, template integration and analysis, and ran the checks and benchmark. Verification used justified expected answers, semantic checks, full-limit cases and Public checks. Own-test results and timings are recorded in `tests/results.txt`.
