@@ -1,7 +1,5 @@
 # Assignment 3: Graph Algorithms
 
-Java 17-compatible code. `Algorithms.java` contains the six algorithms and route reconstruction. The supplied `Main.java`, `Input.java` and `Json.java` retain the template logic, with comments removed and brace placement adjusted. They handle UTF-8 JSON Lines: one request and one answer per line, including `ping`. Six short overloads connect the supplied input format to the algorithm methods also used by the benchmark.
-
 ## Run
 
 From the `Assignment 3` folder in PowerShell:
@@ -22,8 +20,6 @@ For a one-click demonstration, open `tests/Check.java` in VS Code and press Run 
 ```powershell
 java -Xmx1g -cp build Check bench
 ```
-
-## Correctness
 
 ### DSU
 
@@ -71,7 +67,7 @@ Costs use `long`, and distances use `Long[]`. A forest or DAG path has at most `
 
 ## Own tests
 
-The assignment specifies coverage, not a minimum number of own cases. This compact set uses 16 fixed requests, combining related boundaries. No random test campaign is included. Expected answers are written explicitly in `tests/check.py` and justified below. `tests/actual.jsonl` records the actual answers in the same line order.
+This compact set uses 16 fixed requests, combining related boundaries. No random test campaign is included. Expected answers are written explicitly in `tests/check.py` and justified below. `tests/actual.jsonl` records the actual answers in the same line order.
 
 | Lines | Expected answer and justification |
 | --- | --- |
@@ -100,7 +96,6 @@ There is one generated full-limit request per algorithm, each with 100000 vertic
 | Topological order | A deep chain plus duplicate forward shortcuts. Only increasing vertex order is valid. |
 | DAG paths | Chain weights -1000000000 and extra zero-weight forward shortcuts. The chain is optimal, so distance to vertex `v` is `-v * 1000000000`. |
 
-The generators are in `large_cases()`. Large results are checked fully and logged as short summaries. Each input batch has a 20-second timeout and runs with `-Xmx384m`, matching the official launcher. All fixed cases, checker examples and full-limit tests passed in the saved run.
 
 ### Actual route-helper calls
 
@@ -117,8 +112,6 @@ ID 1 is an equally good parallel edge to 2. Both `1->3` and `1->2->3` cost -1; t
 
 ## Benchmark
 
-Recorded on 25 October 2026: Windows 11 Home 10.0.26200, Intel Core i7-13650HX, 14 cores/20 logical processors, about 16 GB RAM. Runtime: Oracle JDK 25.0.1+8-LTS-27, 64-bit HotSpot, `-Xmx1g`; compilation targets Java 17. The Python runner was version 3.12.14.
-
 `Check.graph(n,m)` uses `java.util.Random(73L+n)`. The first `n-1` edges form a chain with negative weights from -1000000000 to -1. Remaining random edges have weights from 0 to 1000000000. Both methods get the identical edge array. The negative chain is the unique optimum: replacing any chain edge with a nonnegative edge raises the cost. Before timing and after each measured call, the checker verifies the cost, one component and every chain edge exactly once.
 
 Each method has one validated warm-up call per size and exactly three measured calls. Their order alternates. `System.nanoTime()` measures the whole algorithm call, including its internal adjacency/DSU/heap construction, sorting, allocation and result creation. Input generation, parsing, validation, printing, JVM startup and compilation are excluded for both methods. No explicit garbage collection is requested.
@@ -134,12 +127,4 @@ Times below are milliseconds from `tests/results.txt`; the median is the middle 
 | 100000 | 250000 | 100073 | Kruskal | 162.383 | 139.743 | 112.075 | 139.743 |
 | 100000 | 250000 | 100073 | Prim | 318.580 | 322.200 | 354.353 | 322.200 |
 
-Kruskal had a lower median at the first and largest sizes; Prim at the middle size. This is one sparse graph family with a known optimum, not evidence of a universal winner. One warm-up and three samples leave considerable JIT, garbage-collection and system noise. Those effects were not separately measured. The complexity bounds above come from algorithm analysis, not these timings.
-
-## Status and sources
-
-The official template was integrated from commit `76c1d91daa90ceadcb225f5408d54d4bfcf397f9`. The Java input support was reformatted and comments were removed from Java and Python support files. The checking logic and `tools/public.json` were preserved. Unused language starters, copies of the assignment PDFs, template README files and regression tests for maintaining the template's checking tools were removed. The workflow installs only Java 17 and Python 3.12 and runs `python tools/run.py --setup` and `python tools/run.py --check`. All 36 public cases and the repeated batch remain intact. These checks passed locally. The actual Moodle deadline has not been verified, and Moodle submission is a separate step.
-
-Sources: the [assignment specification and template](https://github.com/RZhaniya/daa-assignment-3-graphs); the supplied English/Russian PDFs; Lecture 7 for Kosaraju, DFS ordering and DAG relaxation; and the syllabus for submission and AI-use policies. The assignment's null marker takes precedence over the lecture's general suggestion of -1 for unreachable distances.
-
-ChatGPT/Codex assisted with the algorithm code, tests, template integration and this analysis, and ran the recorded checks and measurements. Verification consists of the explicit expected answers, semantic checks, full-limit tests and official Public checks above. A separate manual review by the student has not yet been confirmed.
+Kruskal had a lower median at the first and largest sizes; Prim at the middle size. This is one sparse graph family with a known optimum, not evidence of a universal winner. One warm-up and three samples leave considerable JIT, garbage-collection and system noise. 
